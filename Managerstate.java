@@ -1,132 +1,134 @@
 import java.util.*;
 import java.text.*;
 import java.io.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Scanner;
 
-public class ManagerState extends WarehouseState {
-    // below is only needed to let the switch-case process (work)
+public class ManagerMenuState extends WarehouseState {
 
+  private static Warehouse warehouse;
+  Scanner scanner;
+
+
+  //Singleton pattern:
+  private static ManagerMenuState managerMenuState;
+  private ManagerMenuState() { //Private constructor
+      super();
+      warehouse = warehouse.instance(); //If the warehouse doesn't already exist create it.
+      this.scanner = new Scanner(System.in);
+  }
+
+  public static ManagerMenuState instance() { //Instance method
+    if (managerMenuState == null) {
+      managerMenuState = new ManagerMenuState();
+    }
+    return managerMenuState;
+  }
+
+  //Options for process and help
     private static final int ADD_PRODUCT = 0;
     private static final int DISPLAY_WAITLIST = 1;
     private static final int RECEIVE_SHIPMENT = 2;
     private static final int BECOME_CLERK = 3;
     private static final int EXIT = 4;
-    
-    /*Question to ask group: I know the HW says just add product unclear about the qty but i could assume that u can do either 
-    just add prod with id or qty and name etc */
+    private static final int HELP = 5;
 
-    //creates a new product and adds it to the product list stored inside Warehouse.
-    public void addProduct(){
-        do{
-            String name = getToken("Enter Product name to add: ");
-            //get token only takes string input so we have to parse the int and double as warehouse in project 1 implements it with int and double
-            double price = Double.parseDouble(getToken("Enter price: "));
-            int qty = Integer.parseInt(getToken("Enter quantity to add: "));
-            //GO BACK: warehouse shouldn't be capital because its an INSTANCE method 
-            //and not a static method in project1 Warehouse.java code (backend)
-            //which means it must be called on the object and not the class name 
-            warehouse.addProduct(name, price, qty); //calls the method on the instance
-            System.out.println("Product added");
-            
-            if (!yesOrNo("Add more product? ")) {
-            break;
+    public void help() {
+      System.out.println("Enter a number between 0 and 5 as explained below:");
+      System.out.println(ADD_PRODUCT + " to add new products to the warehouse.");
+      System.out.println(DISPLAY_WAITLIST + " to view a product's waitlist.");
+      System.out.println(BECOME_CLERK + "to become a clerk.");
+      System.out.println(EXIT + " to Exit\n");
+      System.out.println(HELP + " for help");
+  }
+
+    //Directly from UserInterface.java
+   private void addProduct() {
+        System.out.print("Enter Product Name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter Product Quantity: ");
+        int quantity = Integer.parseInt(scanner.nextLine());
+        System.out.print("Enter Product Price: ");
+        double price = Double.parseDouble(scanner.nextLine());
+        warehouse.addProduct(name, price, quantity);
+    }
+
+    //Directly from UserInterface.java
+    public void displayWaitlist() {
+       System.out.print("Enter product ID: ");
+       System.out.println(warehouse.getWaitlist(scanner.nextLine())); //getWaitList returns the string of its results.
+
+}
+    //Directly from UserInterface.java
+    private void receiveShipment() {
+        System.out.print("Enter product ID: ");
+        String productId = scanner.nextLine().trim();
+        System.out.print("Enter quantity received: ");
+        int qty = Integer.parseInt(scanner.nextLine().trim());
+
+        boolean success = warehouse.receiveShipment(productId, qty);
+            if (success) {
+            System.out.println("Shipment recorded.");
+            } else {
+            System.out.println("Shipment not recorded.");
+            waitForEnter();
             }
-        } while (true);
+
     }
 
-    public void DisplayWaitlist() {
-    try {
-        String productId = getToken("Enter Product ID: ");
-        String list = warehouse.getWaitlist(productId);
-        System.out.println(list);
-    } 
-    catch (Exception err) {
-        System.out.println("Error displaying waitlist: " + err.getMessage());
+    private void waitForEnter(){
+        System.out.println("\nPress 'Enter' to return...");
+        scanner.nextLine();
     }
-}
 
-
-//OR: FROM THE REQUIREMENT BELOW:
-//Accept a shipment for a product. Shipment details specify a productid and quantity. 
-//Waitlisted listed orders must be filled first, before amount in stock is updated
- 
-    public void receiveShipment(){
-    do {
-        String productId = getToken(prompt: "Enter product ID: ");
-        int qty = Integer.parseInt(getToken(prompt: "Enter quantity received: "));
-
-        boolean ok = warehouse.receiveShipment(productId, qty);
-        System.out.println("Shipment has processed");
-
-        if (!yesOrNo("Receive another shipment?")) {
-            break;
-        }
-    } while (true);
-}
-
-//Transition 
-//double check this -- with warehousecontext.java
-public boolean becomeClerk()
-  {
-    String userID = getToken("Please input the user id: ");
-    if (Warehouse.instance().searchMembership(userID) != null){
-      (WarehouseContext.instance()).setUser(userID);      
-      return true;
+    //Transition to clerk state
+    public boolean becomeClerk() {
+      int transitionToClerk = 2;
+      WarehouseContext.instance()).changeState(transitionToClerk);
     }
-    else 
-      System.out.println("Invalid user id."); return false;
-  }
 
  
-    public void logout()
-  {
-    if ((WarehouseContext.instance()).getLogin() == WarehouseContext.IsClerk)
-       { //stem.out.println(" going to clerk \n ");
-         (WarehouseContext.instance()).changeState(-); // exit with a code --
-        }
-    else if (WarehouseContext.instance().getLogin(-) == WarehouseContext.IsClient)
-       {  //stem.out.println(" going to login \n");
-        (WarehouseContext.instance()).changeState(); // exit with a code --
-       }
-    else if (WarehouseContext.instance().getLogin(-) == WarehouseContext.IsManager)
-       {  //stem.out.println(" going to login \n");
-        (WarehouseContext.instance()).changeState(); // exit with a code --
+    public void logout() {
+    int transitionToLogin = 0;
+    int transitionErrorState = 4; //Check with group about error state code. 
+    //This should be the only check you do.
+    //Someone can't login as client or clerk and see the manager menu. 
+    if (WarehouseContext.instance().getLogin() == WarehouseContext.IsManager) 
+       {  //System.out.println("going to login \n");
+        (WarehouseContext.instance()).changeState(transitionToLogin); // to login state.
        }
     else 
-       (WarehouseContext.instance()).changeState(-); // exit code -- for error
+       (WarehouseContext.instance()).changeState(transitionErrorState); // go to an error state
   }
- 
-}
     
     public void process() {
-    int command, exitcode = -1;
+    int command;
     help();
     boolean done = false;
     while (!done) {
-      switch (getCommand()) {
+      switch (getCommand()) { //Only should break out of the switch case loop to change state or exit. 
         case ADD_PRODUCT:        addProduct();
                                  break;
-        case DISPLAY_WAITLIST:   displayWaitList();
+        case DISPLAY_WAITLIST:   displayWaitlist();
                                  break;
         case RECEIVE_SHIPMENT:   receiveShipment();
                                  break;
-        case BECOME_CLERK:      becomeClerk();
-                                break;
-        case USERMENU:          if (usermenu())
-                                  {exitcode = 1;
-                                   done = true;}
-                                break;
-        case HELP:              help();
-                                break;
-        case EXIT:              exitcode = 0;
-                                done = true; break;
+        case BECOME_CLERK:       becomeClerk();
+                                 done = true;
+                                 break;
+        case HELP:               help();
+                                 break;
+        case EXIT:               logout();
+                                 done = true;
+                                 break;
       }
     }
-    terminate(exitcode);
+    logout();
   }
 
 
   public void run() {
     process();
   }
-
 }
