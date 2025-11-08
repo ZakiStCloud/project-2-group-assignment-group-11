@@ -19,13 +19,13 @@ public class WarehouseContext{
   private int[][] nextState;
 
 
-private WarehouseContext{
+private WarehouseContext(){
 
   states = new WarehouseState[4];
-  states[3] = ManagerState.instance();
-  states[2] = Clerkstate.instance();
-  states[1] = Userstate.instance(); 
-  states[0] = Loginstate.instance();
+  states[3] = ManagerMenuState.instance();
+  states[2] = ClerkMenuState.instance();
+  states[1] = ClientMenuState.instance(); 
+  states[0] = LoginMenuState.instance();
 
   currentState = 0;
   nextState = new int[4][4];

@@ -85,7 +85,7 @@ public class ManagerMenuState extends WarehouseState {
     //Transition to clerk state
     public boolean becomeClerk() {
       int transitionToClerk = 2;
-      WarehouseContext.instance()).changeState(transitionToClerk);
+      WarehouseContext.instance().changeState(transitionToClerk);
     }
 
  
