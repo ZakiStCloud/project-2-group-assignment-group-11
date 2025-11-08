@@ -1,6 +1,4 @@
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+
 import java.util.*;
 import java.text.*;
 import java.io.*;
@@ -17,6 +15,8 @@ public class WarehouseContext{
   public static final int IsManager = 3;
   private static WarehouseState[] states;
   private int[][] nextState;
+  private BufferedReader reader = new BufferedReader(new 
+                                      InputStreamReader(System.in));
 
 
 private WarehouseContext(){
