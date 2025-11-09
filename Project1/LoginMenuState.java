@@ -4,7 +4,7 @@ public class LoginMenuState extends WarehouseState{
 
   Scanner scanner;
   private static Warehouse warehouse;
-  private static LoginMenuState loginMenuState; //Singleton pattern
+  private static LoginMenuState loginMenuState; //For singleton pattern
 
 
   private LoginMenuState() { //Private constructor
@@ -20,8 +20,46 @@ public class LoginMenuState extends WarehouseState{
         return loginMenuState;
     }
 
+  public void accessManagerMenu() {
+    (WarehouseContext.instance()).setLogin(WarehouseContext.IsManager);
+    (WarehouseContext.instance()).changeState(3);
+
+  }
+
+  public void accessClerkMenu() {
+    (WarehouseContext.instance()).setLogin(WarehouseContext.IsClerk);
+    (WarehouseContext.instance()).changeState(2);
+
+
+  }
+
+  public void accessClientMenu() {
+    (WarehouseContext.instance()).setLogin(WarehouseContext.IsClient);
+    (WarehouseContext.instance()).changeState(1);
+
+
+  }
+
    public void run() {
-    
+
+    while(true){
+        System.out.println("Login as?");
+        System.out.println("1 for Client, \n 2 for clerk, \n 3 for manager.");
+        int choice = Integer.parseInt(scanner.nextLine());
+
+        switch(choice) {
+            case 1:
+                accessClientMenu();
+                break;
+            case 2:
+                accessClerkMenu();
+                break;
+            case 3:
+                accessManagerMenu();
+                break;
+        }
+    }
+
    }
 
 
