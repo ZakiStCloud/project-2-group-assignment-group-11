@@ -42,12 +42,15 @@ public class ClerkMenuState extends WarehouseState {
                 case 3:     // Show clients
                     showClients();
                     break;
+                case 4:     // Show clients
+                    showClientsWithBalance();
+                    break;
 
-                case 4:     // Record payment
+                case 5:     // Record payment
                     processPayment();
                     break;
 
-                case 5:     // Become client
+                case 6:     // Become client
                     becomeClient();
                     done = true;   //Leaving ClerkMenu state
                     break;
@@ -69,8 +72,9 @@ public class ClerkMenuState extends WarehouseState {
         System.out.println("1. Add Client");
         System.out.println("2. Show Products (qty & price)");
         System.out.println("3. Show Clients");
-        System.out.println("4. Record Payment from Client");
-        System.out.println("5. Become Client");
+        System.out.println("4. Show Clients With Outstanding balance");
+        System.out.println("5. Record Payment from Client");
+        System.out.println("6. Become Client");
         System.out.print("Enter choice: ");
 
         try {
@@ -98,11 +102,20 @@ public class ClerkMenuState extends WarehouseState {
                         System.out.println(p);}
     }
 
-
     private void showClients() {
         System.out.println("\n--- All Clients ---");
         for (Client c : warehouse.listClients()) {
             System.out.println(c);
+        }
+    }
+
+
+    private void showClientsWithBalance() {
+        System.out.println("\n--- All Clients ---");
+        for (Client c : warehouse.listClients()) {
+            if (c.getBalance() > 0){
+            System.out.println(c);
+            }
         }
     }
 
@@ -146,4 +159,3 @@ public class ClerkMenuState extends WarehouseState {
        }
     
   }
-

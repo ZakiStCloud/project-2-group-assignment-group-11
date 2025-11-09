@@ -80,7 +80,6 @@ public String getUser(){
 //Initiates the change of state based on current and ddesired state
  public void changeState(int transition)
   {
-    System.out.println("current state " + currentState + "transition: "+ transition + " \n \n ");
     currentState = nextState[currentState][transition];
     if (currentState == -2) 
       {System.out.println("Error has occurred"); terminate();}

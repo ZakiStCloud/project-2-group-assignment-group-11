@@ -45,7 +45,7 @@ public class ManagerMenuState extends WarehouseState {
   public int getCommand() {
     do {
       try {
-        int value = Integer.parseInt(getToken("Enter command:" + HELP + " for help"));
+        int value = Integer.parseInt(getToken(" "));
         if (value >= 0 && value <= 5) {
           return value;
         }
@@ -68,8 +68,8 @@ public class ManagerMenuState extends WarehouseState {
       System.out.println("\n==================== Manager Menu ====================");
       System.out.println("Enter a number to continue:");
       System.out.println(ADD_PRODUCT + ". Add Product");
-      System.out.println(RECEIVE_SHIPMENT + ". Receive Shipment");
       System.out.println(DISPLAY_WAITLIST + ". View Product Waitlist");
+      System.out.println(RECEIVE_SHIPMENT + ". Receive Shipment");
       System.out.println(BECOME_CLERK + ". Become Clerk");
       System.out.println(PRINT_INVOICES + ". Show all Customer Invoices");
       System.out.println(EXIT + ". Logout");
