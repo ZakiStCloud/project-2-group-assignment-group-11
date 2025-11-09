@@ -29,7 +29,7 @@ private WarehouseContext(){
 
   currentState = 0;
   nextState = new int[4][4];
-  nextState[0][0] = -1;nextState[0][1] = 1;nextState[0][2] = 2;nextState[0][2] = 3;
+  nextState[0][0] = -1;nextState[0][1] = 1;nextState[0][2] = 2;nextState[0][3] = 3;
   nextState[1][0] = 0;nextState[1][1] = 1;nextState[1][2] = -2;nextState[1][3] = -2;
   nextState[2][0] = 0;nextState[2][1] = 1;nextState[2][2] = 2;nextState[2][3] = -2;
   nextState[3][0] = 0;nextState[3][1] = 1;nextState[3][2] = 2;nextState[3][3] = 3;
@@ -80,7 +80,7 @@ public String getUser(){
 //Initiates the change of state based on current and ddesired state
  public void changeState(int transition)
   {
-    //System.out.println("current state " + currentState + " \n \n ");
+    System.out.println("current state " + currentState + "transition: "+ transition + " \n \n ");
     currentState = nextState[currentState][transition];
     if (currentState == -2) 
       {System.out.println("Error has occurred"); terminate();}
@@ -89,9 +89,8 @@ public String getUser(){
       terminate();}
     states[currentState].run();
   }
-
 //Exits the program
-private void terminate(){
+public void terminate(){
   System.exit(0);
 } 
 

@@ -18,9 +18,7 @@ public class ClerkMenuState extends WarehouseState {
         in = new Scanner(System.in);
     }
 
-    // ==============================
-    // Public entry point 
-    // ==============================
+
     public void run() {
         boolean done = false;
 
@@ -64,9 +62,7 @@ public class ClerkMenuState extends WarehouseState {
         run();
     }
 
-    // =======================
-    // Menu & command input 
-    // =======================
+
     private int getCommand() {
         System.out.println("\n==================== Clerk Menu ====================");
         System.out.println("0. Logout");
@@ -84,9 +80,6 @@ public class ClerkMenuState extends WarehouseState {
         }
     }
 
-    // =============
-    // 1) Add client
-    // =============
     private void addClient() {
         System.out.println("\n--- Add Client ---");
         System.out.print("Client name: ");
@@ -98,18 +91,14 @@ public class ClerkMenuState extends WarehouseState {
         warehouse.addClient(name, address);
     }
 
-    // ===================================================
-    // 2) Show products (with available quantity and price)
-    // ===================================================
+
     private void showProducts() {
         System.out.println("\n--- Product List (qty & price) ---");
         for (Product p : warehouse.listProducts()) {
                         System.out.println(p);}
     }
 
-    // ===================
-    // 3) Show all clients
-    // ===================
+
     private void showClients() {
         System.out.println("\n--- All Clients ---");
         for (Client c : warehouse.listClients()) {
@@ -117,13 +106,7 @@ public class ClerkMenuState extends WarehouseState {
         }
     }
 
-    // ============================================
-    // 4) Show all clients with outstanding balance
-    // ============================================
 
-    // ===============================
-    // 5) Record payment from a client
-    // ===============================
     private void processPayment() {
         System.out.println("\n--- Record Client Payment ---");
 
@@ -139,8 +122,6 @@ public class ClerkMenuState extends WarehouseState {
             return;
         }
 
-        // Match to your Warehouse method:
-        // Example: boolean ok = warehouse.recordPayment(clientId, amount);
         boolean ok = warehouse.receivePayment(clientId, amount);
 
         if (ok) {
@@ -150,29 +131,19 @@ public class ClerkMenuState extends WarehouseState {
         }
     }
 
-    // ============================================================================
-    // 6) Become a client (ask for clientID, validate, switch to ClientMenuState)
-    // ============================================================================
+
      public void becomeClient() {
     int transitionToClient = 1;    
     
     WarehouseContext.instance().changeState(transitionToClient );
   }
 
-    // ======================
-    // 7) Logout (Exit event)
-    // ======================
+ 
     public void logout() {
     int transitionToLogin = 0;
-    int transitionErrorState = -2; //error
-    
-    
-    if (WarehouseContext.instance().getLogin() == WarehouseContext.IsClerk) 
-       {  //System.out.println("going to Manager \n");
+
         (WarehouseContext.instance()).changeState(transitionToLogin); // to login state.
        }
-    //Error state if the user state isn't clerk somehow
-    else 
-       (WarehouseContext.instance()).changeState(transitionErrorState); // go to an error state
+    
   }
-}
+

@@ -46,7 +46,7 @@ public class ManagerMenuState extends WarehouseState {
     do {
       try {
         int value = Integer.parseInt(getToken("Enter command:" + HELP + " for help"));
-        if (value >= EXIT && value <= HELP) {
+        if (value >= 0 && value <= 5) {
           return value;
         }
       } catch (NumberFormatException nfe) {
@@ -60,16 +60,21 @@ public class ManagerMenuState extends WarehouseState {
     private static final int DISPLAY_WAITLIST = 1;
     private static final int RECEIVE_SHIPMENT = 2;
     private static final int BECOME_CLERK = 3;
-    private static final int EXIT = 4;
-    private static final int HELP = 5;
+    private static final int PRINT_INVOICES = 4;
+    private static final int EXIT = 5;
+    private static final int HELP = 6;
 
     public void help() {
-      System.out.println("Enter a number between 0 and 5 as explained below:");
-      System.out.println(ADD_PRODUCT + " to add new products to the warehouse.");
-      System.out.println(DISPLAY_WAITLIST + " to view a product's waitlist.");
-      System.out.println(BECOME_CLERK + "to become a clerk.");
-      System.out.println(EXIT + " to Exit\n");
-      System.out.println(HELP + " for help");
+      System.out.println("\n==================== Manager Menu ====================");
+      System.out.println("Enter a number to continue:");
+      System.out.println(ADD_PRODUCT + ". Add Product");
+      System.out.println(RECEIVE_SHIPMENT + ". Receive Shipment");
+      System.out.println(DISPLAY_WAITLIST + ". View Product Waitlist");
+      System.out.println(BECOME_CLERK + ". Become Clerk");
+      System.out.println(PRINT_INVOICES + ". Show all Customer Invoices");
+      System.out.println(EXIT + ". Logout");
+      System.out.println(HELP + ". Help");
+      System.out.print("Enter choice: ");
   }
 
     //Directly from UserInterface.java
@@ -119,16 +124,8 @@ public class ManagerMenuState extends WarehouseState {
 
  
     public void logout() {
-    int transitionToLogin = 0;
-    int transitionErrorState = 4; //Check with group about error state code. 
-    //This should be the only check you do.
-    //Someone can't login as client or clerk and see the manager menu. 
-    if (WarehouseContext.instance().getLogin() == WarehouseContext.IsManager) 
-       {  //System.out.println("going to login \n");
-        (WarehouseContext.instance()).changeState(transitionToLogin); // to login state.
-       }
-    else 
-       (WarehouseContext.instance()).changeState(transitionErrorState); // go to an error state
+      int transitionToLogin = 0;
+      WarehouseContext.instance().changeState(transitionToLogin); // to login state. 
   }
     
     public void process() {
@@ -145,6 +142,8 @@ public class ManagerMenuState extends WarehouseState {
         case BECOME_CLERK:       becomeClerk();
                                  done = true;
                                  break;
+        case PRINT_INVOICES: for (Transaction t : warehouse.getTransactions()) {
+                        System.out.println(t.getInvoice());}
         case HELP:               help();
                                  break;
         case EXIT:               logout();

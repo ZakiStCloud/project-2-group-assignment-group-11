@@ -20,14 +20,16 @@ public class ClientMenuState extends WarehouseState{
     private static final int logout = 6; 
 
     public void help() {
-        System.out.println("Enter a number between 0 and 6 as explained below:");
-        System.out.println(showClientDetails + ""); 
-        System.out.println(showProducts + "");
-        System.out.println(showTransactions + ""); 
-        System.out.println(addToWishList + ""); 
-        System.out.println(displayWishlist + ""); 
-        System.out.println(placeOrder + ""); 
-        System.out.println(logout + ""); 
+        System.out.println("\n==================== Client Menu ====================");
+        System.out.println("Enter a number to continue:");
+        System.out.println(showClientDetails + ". Show Client Details"); 
+        System.out.println(showProducts + ". Show Products (price only)");
+        System.out.println(showTransactions + ". Show Client Transactions"); 
+        System.out.println(addToWishList + ". Add to Client Wishlist"); 
+        System.out.println(displayWishlist + ". Display Client Wishlist"); 
+        System.out.println(placeOrder + ". Order Off Client Wishlist"); 
+        System.out.println(logout + ". Logout"); 
+        System.out.println("Enter choice: ");
     }
    
 
@@ -155,21 +157,7 @@ public class ClientMenuState extends WarehouseState{
         }
 
     private void logout() {
-    if ((WarehouseContext.instance()).getLogin() == WarehouseContext.IsManager)
-       { //stem.out.println(" going to manager \n ");
-         (WarehouseContext.instance()).changeState(-2); //error
-        }
-    else if (WarehouseContext.instance().getLogin() == WarehouseContext.IsClerk)
-       {  //stem.out.println(" going to clerk \n");
-        (WarehouseContext.instance()).changeState(-2); //error 
-       }
-     else if (WarehouseContext.instance().getLogin() == WarehouseContext.IsClient)
-       {  //stem.out.println(" going to login \n");
-        (WarehouseContext.instance()).changeState(0); // return to login
-       }
-    else 
-       (WarehouseContext.instance()).changeState(-2); // error
-
+        WarehouseContext.instance().changeState(0);
     }
 
     private void process() {

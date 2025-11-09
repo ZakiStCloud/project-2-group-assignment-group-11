@@ -43,8 +43,14 @@ public class LoginMenuState extends WarehouseState{
    public void run() {
 
     while(true){
-        System.out.println("Login as?");
-        System.out.println("1 for Client, \n 2 for clerk, \n 3 for manager.");
+        System.out.println("\n==================== Login Menu ====================");
+        System.out.println("Enter a number to login:");
+        System.out.println("1. Login as Client");
+        System.out.println("2. Login as Clerk");
+        System.out.println("3. Login as Manager");
+        System.out.println("4. to Exit");
+        System.out.print("Enter choice: ");
+
         int choice = Integer.parseInt(scanner.nextLine());
 
         switch(choice) {
@@ -56,6 +62,9 @@ public class LoginMenuState extends WarehouseState{
                 break;
             case 3:
                 accessManagerMenu();
+                break;
+            case 4:
+                WarehouseContext.instance().terminate();
                 break;
         }
     }
