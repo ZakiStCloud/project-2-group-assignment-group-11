@@ -10,7 +10,7 @@ public class WarehouseContext{
   private int currentUser;
   private String userID;
   private static WarehouseContext context;
-  public static final int IsUser = 1;
+  public static final int IsClient = 1;
   public static final int IsClerk = 2;
   public static final int IsManager = 3;
   private static WarehouseState[] states;

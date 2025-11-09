@@ -163,7 +163,7 @@ public class ClientMenuState extends WarehouseState{
        {  //stem.out.println(" going to clerk \n");
         (WarehouseContext.instance()).changeState(-2); //error 
        }
-     else if (WarehouseContext.instance().getLogin() == WarehouseContext.IsUser)
+     else if (WarehouseContext.instance().getLogin() == WarehouseContext.IsClient)
        {  //stem.out.println(" going to login \n");
         (WarehouseContext.instance()).changeState(0); // return to login
        }
