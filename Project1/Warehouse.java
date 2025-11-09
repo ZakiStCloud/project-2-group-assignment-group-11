@@ -7,17 +7,23 @@ public class Warehouse {
     private final ProductList products = new ProductList();
     private final List<Transaction> transactions = new ArrayList<>();
     private final WaitList waitList = WaitList.instance();
-
+    private static Warehouse warehouse;
     void addTransaction(Transaction t) { transactions.add(t); } // used by WaitList.fulfill
 
 
 
-    public Warehouse() {
-        
+    private Warehouse() {
     }
 
+    public static Warehouse instance() {
+    if (warehouse == null) {
+      return (warehouse = new Warehouse());
+    } else {
+      return warehouse;
+        }
+    }
    
-    public void addClient(String clientID, String name, String address, Double balance) {
+    public void addClient(String name, String address) {
         String id = "C" + "000"+ (clients.size() + 1);
         Client client = new Client(id, name, address, 0.00);
         WishList wishlist = new WishList(id);

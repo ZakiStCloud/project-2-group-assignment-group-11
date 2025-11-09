@@ -4,26 +4,55 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Scanner;
+import java.util.StringTokenizer;
+
 
 public class ManagerMenuState extends WarehouseState {
 
   private static Warehouse warehouse;
-  Scanner scanner;
-
+  Scanner reader;
 
   //Singleton pattern:
   private static ManagerMenuState managerMenuState;
   private ManagerMenuState() { //Private constructor
       super();
       warehouse = warehouse.instance(); //If the warehouse doesn't already exist create it.
-      this.scanner = new Scanner(System.in);
+      this.reader = new Scanner(System.in);
   }
+
+  public String getToken(String prompt){ 
+  do {
+      try {
+        System.out.println(prompt);
+        String line = reader.nextLine();
+        StringTokenizer tokenizer = new StringTokenizer(line,"\n\r\f");
+        if (tokenizer.hasMoreTokens()) {
+          return tokenizer.nextToken();
+        }
+      } catch (Exception e) {
+        System.exit(0);
+      }
+    } while (true);
+} 
 
   public static ManagerMenuState instance() { //Instance method
     if (managerMenuState == null) {
       managerMenuState = new ManagerMenuState();
     }
     return managerMenuState;
+  }
+
+  public int getCommand() {
+    do {
+      try {
+        int value = Integer.parseInt(getToken("Enter command:" + HELP + " for help"));
+        if (value >= EXIT && value <= HELP) {
+          return value;
+        }
+      } catch (NumberFormatException nfe) {
+        System.out.println("Enter a number");
+      }
+    } while (true);
   }
 
   //Options for process and help
@@ -46,26 +75,26 @@ public class ManagerMenuState extends WarehouseState {
     //Directly from UserInterface.java
    private void addProduct() {
         System.out.print("Enter Product Name: ");
-        String name = scanner.nextLine();
+        String name = reader.nextLine();
         System.out.print("Enter Product Quantity: ");
-        int quantity = Integer.parseInt(scanner.nextLine());
+        int quantity = Integer.parseInt(reader.nextLine());
         System.out.print("Enter Product Price: ");
-        double price = Double.parseDouble(scanner.nextLine());
+        double price = Double.parseDouble(reader.nextLine());
         warehouse.addProduct(name, price, quantity);
     }
 
     //Directly from UserInterface.java
     public void displayWaitlist() {
        System.out.print("Enter product ID: ");
-       System.out.println(warehouse.getWaitlist(scanner.nextLine())); //getWaitList returns the string of its results.
+       System.out.println(warehouse.getWaitlist(reader.nextLine())); //getWaitList returns the string of its results.
 
 }
     //Directly from UserInterface.java
     private void receiveShipment() {
         System.out.print("Enter product ID: ");
-        String productId = scanner.nextLine().trim();
+        String productId = reader.nextLine().trim();
         System.out.print("Enter quantity received: ");
-        int qty = Integer.parseInt(scanner.nextLine().trim());
+        int qty = Integer.parseInt(reader.nextLine().trim());
 
         boolean success = warehouse.receiveShipment(productId, qty);
             if (success) {
@@ -79,11 +108,11 @@ public class ManagerMenuState extends WarehouseState {
 
     private void waitForEnter(){
         System.out.println("\nPress 'Enter' to return...");
-        scanner.nextLine();
+        reader.nextLine();
     }
 
     //Transition to clerk state
-    public boolean becomeClerk() {
+    public void becomeClerk() {
       int transitionToClerk = 2;
       WarehouseContext.instance().changeState(transitionToClerk);
     }
@@ -103,7 +132,6 @@ public class ManagerMenuState extends WarehouseState {
   }
     
     public void process() {
-    int command;
     help();
     boolean done = false;
     while (!done) {

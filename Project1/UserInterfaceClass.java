@@ -122,8 +122,7 @@ public class UserInterfaceClass {
         String name = scanner.nextLine();
         System.out.print("Enter address: ");
         String address = scanner.nextLine();
-        Double balance = 0.0;
-        warehouse.addClient(null, name, address, balance);
+        warehouse.addClient(name, address);
     }
 
     private void listClients() {

@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class ClerkMenuState {
+public class ClerkMenuState extends WarehouseState {
     private static ClerkMenuState instance;
 
     public static ClerkMenuState instance() {
@@ -45,15 +45,11 @@ public class ClerkMenuState {
                     showClients();
                     break;
 
-                case 4:     // Show clients with balance
-                    showClientsWithBalance();
-                    break;
-
-                case 5:     // Record payment
+                case 4:     // Record payment
                     processPayment();
                     break;
 
-                case 6:     // Become client
+                case 5:     // Become client
                     becomeClient();
                     done = true;   //Leaving ClerkMenu state
                     break;
@@ -77,9 +73,8 @@ public class ClerkMenuState {
         System.out.println("1. Add Client");
         System.out.println("2. Show Products (qty & price)");
         System.out.println("3. Show Clients");
-        System.out.println("4. Show Clients with Outstanding Balance");
-        System.out.println("5. Record Payment from Client");
-        System.out.println("6. Become Client");
+        System.out.println("4. Record Payment from Client");
+        System.out.println("5. Become Client");
         System.out.print("Enter choice: ");
 
         try {
@@ -100,9 +95,7 @@ public class ClerkMenuState {
         System.out.print("Client address: ");
         String address = in.nextLine().trim();
 
-        String id = warehouse.addClient(name, address);
-
-        System.out.println("Client added. New client ID: " + id);
+        warehouse.addClient(name, address);
     }
 
     // ===================================================
@@ -110,7 +103,8 @@ public class ClerkMenuState {
     // ===================================================
     private void showProducts() {
         System.out.println("\n--- Product List (qty & price) ---");
-        warehouse.displayAllProducts();
+        for (Product p : warehouse.listProducts()) {
+                        System.out.println(p);}
     }
 
     // ===================
@@ -118,16 +112,14 @@ public class ClerkMenuState {
     // ===================
     private void showClients() {
         System.out.println("\n--- All Clients ---");
-        warehouse.displayAllClients();
+        for (Client c : warehouse.listClients()) {
+            System.out.println(c);
+        }
     }
 
     // ============================================
     // 4) Show all clients with outstanding balance
     // ============================================
-    private void showClientsWithBalance() {
-        System.out.println("\n--- Clients with Outstanding Balance ---");
-        warehouse.displayClientsWithBalance();
-    }
 
     // ===============================
     // 5) Record payment from a client
@@ -149,7 +141,7 @@ public class ClerkMenuState {
 
         // Match to your Warehouse method:
         // Example: boolean ok = warehouse.recordPayment(clientId, amount);
-        boolean ok = warehouse.recordPayment(clientId, amount);
+        boolean ok = warehouse.receivePayment(clientId, amount);
 
         if (ok) {
             System.out.println("Payment recorded.");
@@ -161,34 +153,26 @@ public class ClerkMenuState {
     // ============================================================================
     // 6) Become a client (ask for clientID, validate, switch to ClientMenuState)
     // ============================================================================
-    private void becomeClient() {
-        System.out.println("\n--- Become Client ---");
-        System.out.print("Enter Client ID: ");
-        String clientId = in.nextLine().trim();
-
-        Client c = warehouse.findClientById(clientId);
-
-        if (c == null) {
-            System.out.println("Invalid Client ID. Cannot switch to client menu.");
-            return;
-        }
-
-        UserInterfaceClass ui = UserInterfaceClass.instance();
-
-        ui.setCurrentClient(c);
-
-        ui.changeState(UserInterfaceClass.TO_CLIENT);
-
-        System.out.println("Now acting as client: " + clientId);
-    }
+     public void becomeClient() {
+    int transitionToClient = 1;    
+    
+    WarehouseContext.instance().changeState(transitionToClient );
+  }
 
     // ======================
     // 7) Logout (Exit event)
     // ======================
-    private void logout() {
-        System.out.println("\nLogging out of Clerk menu...");
-
-        UserInterfaceClass ui = UserInterfaceClass.instance(); 
-        ui.changeState(UserInterfaceClass.EXIT);
-    }
+    public void logout() {
+    int transitionToLogin = 0;
+    int transitionErrorState = -2; //error
+    
+    
+    if (WarehouseContext.instance().getLogin() == WarehouseContext.IsClerk) 
+       {  //System.out.println("going to Manager \n");
+        (WarehouseContext.instance()).changeState(transitionToLogin); // to login state.
+       }
+    //Error state if the user state isn't clerk somehow
+    else 
+       (WarehouseContext.instance()).changeState(transitionErrorState); // go to an error state
+  }
 }
